@@ -1,18 +1,18 @@
-import {mergeSort} from '../../recursion-and-sort-algos/merge-sort'
+import {mergeSort} from '../../recursion-and-sort-algos/merge-sort';
 
-let testArr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+let testArr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const removeDuplicates = (arr) => {
     let result = [];
     for (let n of arr) {
         if (result.indexOf(n) === -1) {
-            result.push(n)
+            result.push(n);
         }
     }
     return result;
 }
 const removeAndSort = (arr) => { 
-    return mergeSort(removeDuplicates(arr))
+    return mergeSort(removeDuplicates(arr));
 }
 
 let sortedArrWithoutDuplicates = removeAndSort(testArr);
@@ -33,10 +33,26 @@ class Tree {
     constructor(arr) {
         this.array = arr;
     }
+
+    insert (value, node) {
+        if (value > node.data) {
+            if (node.right) this.insert(value, node.right);
+            else node.right = new Node(value);
+        }
+        if (value < node.data) {
+            if (node.left) this.insert(value, node.left);
+            else node.left = new Node(value);
+        }
+    }
+
+    delete (value) {
+
+    }
+
 }
 
 let buildTree = (d, start=0, end) => {
-    end = d.length -1
+    end = d.length -1;
     if (start > end) return null;
 
     let mid = Math.floor((start + end) / 2);
@@ -61,7 +77,9 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     }
 }
 
-prettyPrint(binarySearchTree.root)
-
+prettyPrint(binarySearchTree.root);
 console.log(binarySearchTree.root);
-console.log(sortedArrWithoutDuplicates)
+
+binarySearchTree.insert(10, binarySearchTree.root)
+
+prettyPrint(binarySearchTree.root)
