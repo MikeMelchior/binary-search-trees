@@ -49,6 +49,7 @@ class Tree {
         }
     }
 
+        // find next smallest node to use in deletion
     nextSmallest(node) {
         let tmp = node.right;
         while (tmp.left) {
@@ -56,20 +57,8 @@ class Tree {
         }
         return tmp;
     }
-
+        // find next smallest node's parent to use in deletion
     nextSmallestParent(node) {
-        // let tmp = node.right;
-        // if (!tmp.left || !tmp.left.left) {
-        //     return tmp;
-        // }
-
-        // while(tmp.left.left) {
-        //     tmp = tmp.left;
-        // }
-
-
-
-
         let tmp = node.right;
         if (tmp.left.left) {
             while (tmp.left.left) {
@@ -79,34 +68,20 @@ class Tree {
         return tmp;
     }
 
+        // function to use in deletion when deletion node has multiple children
     replaceNodeWithTwoChildren(node) {
             // find next smallest node
         let nextSmallest = this.nextSmallest(node);
-
-
+            // if node to right is not next smallest, first next smallest 
+            // node's parent, then link it to next smallest node's children;
         let parentOfNextSmallest;
-        // if (!nextSmallest.right && node.right !== nextSmallest) {
-        //     nextSmallest.right = node.right;
-        // } else {
-        //     parentOfNextSmallest = this.nextSmallestParent(node);
-        //     parentOfNextSmallest.left = nextSmallest.right;
-        // }
-
         if (node.right !== nextSmallest) {
             parentOfNextSmallest = this.nextSmallestParent(node);
             parentOfNextSmallest.left = nextSmallest.right;
             nextSmallest.right = node.right;
         }
-
-
-
-
-
             // set replacement node's left subtree
         nextSmallest.left = node.left;
-        
-
-            console.log(nextSmallest)
         return nextSmallest;
     }
 
@@ -130,11 +105,9 @@ class Tree {
                     // if node has left & right child
                 else return node.right = this.replaceNodeWithTwoChildren(node.right); 
 
-            
                 // else if value == left child node;
                 // perform same actions but for left side
             } else if (node.left && value == node.left.data) {
-                    
                 if (!node.left.left && !node.left.right) return node.left = null
                 else if (!node.left.right && node.left.left) return node.left = node.left.left;
                 else if (node.left.right && !node.left.left) return node.left = node.left.right;
@@ -158,7 +131,6 @@ let buildTree = (d, start=0, end) => {
     if (start > end) return null;
 
     let mid = Math.floor((start + end) / 2);
-
     let root = new Node(d[mid]);
     root.left = buildTree(d.slice(0, mid), start, end);
     root.right = buildTree(d.slice(mid+1), start, end);
@@ -179,25 +151,13 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     }
 }
 
-
-
 binarySearchTree.insert(56);
 binarySearchTree.insert(10)
 binarySearchTree.insert(35)
 prettyPrint(binarySearchTree.root);
 
 //
-//
-//
-//
-// 
 binarySearchTree.delete(50); 
-//
-//
-//
-
 prettyPrint(binarySearchTree.root); 
+//
 
-
-
-// console.log(binarySearchTree.nextSmallest(binarySearchTree.root));
