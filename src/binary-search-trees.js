@@ -1,7 +1,7 @@
 import {mergeSort} from '../../recursion-and-sort-algos/merge-sort';
 
-let testArr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-
+// let testArr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+let testArr = [20, 30, 32, 34, 36, 40, 50, 60, 65, 70, 75, 80, 85]
 const removeDuplicates = (arr) => {
     let result = [];
     for (let n of arr) {
@@ -34,7 +34,11 @@ class Tree {
         this.array = arr;
     }
 
-    insert (value, node) {
+    insert (value, node=this.root) {
+        if (value == node.data) {
+            console.log('A node with this value already exists, no duplicates allowed')
+            return;
+        }
         if (value > node.data) {
             if (node.right) this.insert(value, node.right);
             else node.right = new Node(value);
@@ -45,10 +49,108 @@ class Tree {
         }
     }
 
-    delete (value) {
-
+    nextSmallest(node) {
+        let tmp = node.right;
+        while (tmp.left) {
+            tmp = tmp.left;
+        }
+        return tmp;
     }
 
+    nextSmallestParent(node) {
+        // let tmp = node.right;
+        // if (!tmp.left || !tmp.left.left) {
+        //     return tmp;
+        // }
+
+        // while(tmp.left.left) {
+        //     tmp = tmp.left;
+        // }
+
+
+
+
+        let tmp = node.right;
+        if (tmp.left.left) {
+            while (tmp.left.left) {
+                tmp = tmp.left
+            }
+        }
+        return tmp;
+    }
+
+    replaceNodeWithTwoChildren(node) {
+            // find next smallest node
+        let nextSmallest = this.nextSmallest(node);
+
+
+        let parentOfNextSmallest;
+        // if (!nextSmallest.right && node.right !== nextSmallest) {
+        //     nextSmallest.right = node.right;
+        // } else {
+        //     parentOfNextSmallest = this.nextSmallestParent(node);
+        //     parentOfNextSmallest.left = nextSmallest.right;
+        // }
+
+        if (node.right !== nextSmallest) {
+            parentOfNextSmallest = this.nextSmallestParent(node);
+            parentOfNextSmallest.left = nextSmallest.right;
+            nextSmallest.right = node.right;
+        }
+
+
+
+
+
+            // set replacement node's left subtree
+        nextSmallest.left = node.left;
+        
+
+            console.log(nextSmallest)
+        return nextSmallest;
+    }
+
+    delete (value, node=this.root) {
+            // if tree is empty return;
+        if (node == null) return;
+            // if root node == value;
+        if (node.data == value) {
+            return this.root = this.replaceNodeWithTwoChildren(node);
+        } else {
+            // check if value is a child of node
+                // if value == right child of node
+            if (node.right && value == node.right.data) {
+                    // if 0 children remove node;
+                if (!node.right.right && !node.right.left) return node.right = null;
+                // else if node has children...
+                    //if value node has right child node but not left;
+                else if (node.right.right && !node.right.left) return node.right = node.right.right;
+                    // if value node has left child node but not right;
+                else if (node.right.left && !node.right.right) return node.right = node.right.left;
+                    // if node has left & right child
+                else return node.right = this.replaceNodeWithTwoChildren(node.right); 
+
+            
+                // else if value == left child node;
+                // perform same actions but for left side
+            } else if (node.left && value == node.left.data) {
+                    
+                if (!node.left.left && !node.left.right) return node.left = null
+                else if (!node.left.right && node.left.left) return node.left = node.left.left;
+                else if (node.left.right && !node.left.left) return node.left = node.left.right;
+                else return node.left = this.replaceNodeWithTwoChildren(node.left);
+
+                // else recurse down tree;
+            } else {
+                if (value < node.data && node.left) {
+                    this.delete(value, node.left)
+                }
+                else if (value > node.data && node.right) {
+                    this.delete(value, node.right);
+                }
+            }
+        } 
+    }
 }
 
 let buildTree = (d, start=0, end) => {
@@ -77,9 +179,25 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     }
 }
 
+
+
+binarySearchTree.insert(56);
+binarySearchTree.insert(10)
+binarySearchTree.insert(35)
 prettyPrint(binarySearchTree.root);
-console.log(binarySearchTree.root);
 
-binarySearchTree.insert(10, binarySearchTree.root)
+//
+//
+//
+//
+// 
+binarySearchTree.delete(50); 
+//
+//
+//
 
-prettyPrint(binarySearchTree.root)
+prettyPrint(binarySearchTree.root); 
+
+
+
+// console.log(binarySearchTree.nextSmallest(binarySearchTree.root));
