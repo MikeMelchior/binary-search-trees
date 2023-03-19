@@ -124,6 +124,13 @@ class Tree {
             }
         } 
     }
+
+    find(value, node = this.root) {
+        if (value == node.data) console.log(node)
+        
+        else if (value > node.data) this.find(value, node.right);
+        else if (value < node.data) this.find(value, node.left);
+    }
 }
 
 let buildTree = (d, start=0, end) => {
@@ -157,7 +164,8 @@ binarySearchTree.insert(35)
 prettyPrint(binarySearchTree.root);
 
 //
-binarySearchTree.delete(50); 
-prettyPrint(binarySearchTree.root); 
+// binarySearchTree.delete(50); 
+// prettyPrint(binarySearchTree.root); 
 //
 
+binarySearchTree.find(56)
