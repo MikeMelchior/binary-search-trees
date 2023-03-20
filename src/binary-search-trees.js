@@ -1,6 +1,5 @@
 import {mergeSort} from '../../recursion-and-sort-algos/merge-sort';
 
-// let testArr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let testArr = [20, 30, 32, 34, 36, 40, 50, 60, 65, 70, 75, 80, 85]
 const removeDuplicates = (arr) => {
     let result = [];
@@ -11,11 +10,10 @@ const removeDuplicates = (arr) => {
     }
     return result;
 }
-const removeAndSort = (arr) => { 
+const removeDuplicatesAndSort = (arr) => { 
     return mergeSort(removeDuplicates(arr));
 }
 
-let sortedArrWithoutDuplicates = removeAndSort(testArr);
 
 class Node {
     constructor(d){
@@ -136,10 +134,12 @@ class Tree {
         while(queue.length > 0) {
               // make copy of "First Out" node;
             let node = queue[0]
+
               // shift "First Out" node out of que and into function
             if (func) func(queue.shift());
               // if no function, push to array for return
             else if (!func) arr.push(queue.shift());
+
               // recursion
             if (node.left) queue.push(node.left)
             if (node.right) queue.push(node.right)
@@ -168,7 +168,7 @@ class Tree {
         this.postOrder(func, node.left);
     }
 
-    height(node) {
+    height(node=this.root) {
           // find depth of given node from root
         let fromRoot = this.depth(node);
           // init deepest variable and traverse subtree ot find
@@ -230,36 +230,103 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 
 //
 //
-// ~~~~~~~ TESTING AREA ~~~~~~~~~~~
+// ~~~~~~~ Tie it all together ~~~~~~~~~~~
 //
 //
 
 
-let binarySearchTree = new Tree(sortedArrWithoutDuplicates);
-binarySearchTree.root = buildTree(binarySearchTree.array);
+// Write a simple driver script that does the following:
+
+// 1. Create a binary search tree from an array of random numbers. 
+// You can create a function that returns an array of random numbers 
+// every time you call it, if you wish.
+
+// 2. Confirm that the tree is balanced by calling isBalanced
+
+// 3. Print out all elements in level, pre, post, and in order
+
+// 4. Unbalance the tree by adding several numbers > 100
+
+// 5. Confirm that the tree is unbalanced by calling isBalanced
+
+// 6. Balance the tree by calling rebalance
+
+// 7. Confirm that the tree is balanced by calling isBalanced
+
+// 8. Print out all elements in level, pre, post, and in order
 
 
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-binarySearchTree.insert(56);
-binarySearchTree.insert(10);
-binarySearchTree.insert(9);
-binarySearchTree.insert(35);
-binarySearchTree.insert(8)
-binarySearchTree.insert(7)
-binarySearchTree.insert(6)
-binarySearchTree.insert(5)
-prettyPrint(binarySearchTree.root);
 
-//
-// binarySearchTree.delete(50); 
-// prettyPrint(binarySearchTree.root); 
-//
+// 1
 
-let testNode = binarySearchTree.find(70);
-let testNodeTwo = binarySearchTree.find(56);
+const randomArrayOfNumbers = () => {
+    let randomArr = []
+      // create random integer up to 25;
+    let randInt = Math.floor(Math.random() * 25) + 1
+      // add randInt number of random numbers up to 1000 to array
+    for (let i=0; i<randInt; i++) {
+        randomArr.push(Math.floor(Math.random() * 1000)) + 1
+    }
+    return randomArr;
+}
+  // copied from console log of above func, for consistency
+let x = [806, 172, 767, 741, 661, 180, 482, 199, 
+        380, 535, 746, 153, 323, 426, 906, 354, 
+        81, 279, 494, 300, 280, 615]
 
-console.log(binarySearchTree.isBalanced())
-binarySearchTree.rebalance();
-prettyPrint(binarySearchTree.root)
+let bst = new Tree;
+bst.root = buildTree(removeDuplicatesAndSort(x))
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+// 2
+
+console.log(bst.isBalanced())  // .... true;
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 3 
+
+const print = (x) => {
+    console.log(x);
+}
+
+// bst.levelOrder(print)  
+// bst.preOrder(print)
+// bst.inOrder(print)
+// bst.postOrder(print)
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 4
+
+bst.insert(80)
+bst.insert(70)
+bst.insert(60)
+bst.insert(50)
+bst.insert(40)
+bst.insert(30)
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 5
+
+console.log(bst.isBalanced())  //  .... false
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 6 
+
+bst.rebalance();
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 7 
+
+console.log(bst.isBalanced());  //  .... true
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// 8
+
+// bst.levelOrder(print)  
+// bst.preOrder(print)
+// bst.inOrder(print)
+bst.postOrder(print)

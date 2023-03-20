@@ -5,7 +5,7 @@ module.exports = {
   mode: 'development',  
   entry: {
     bst: './src/binary-search-trees.js',
-    mergeSort: '../recursion-and-sort-algos/merge-sort.js'
+    mergeSort: '../recursion-and-sort-algos/merge-sort.js',
     },
   plugins: [
     new HtmlWebpackPlugin({
