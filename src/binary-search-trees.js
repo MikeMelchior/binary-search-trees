@@ -131,13 +131,20 @@ class Tree {
     }
 
     levelOrder(func, start=this.root) {
+        let arr = []
         let queue = [start];
         while(queue.length > 0) {
+              // make copy of "First Out" node;
             let node = queue[0]
-            func(queue.shift());
+              // shift "First Out" node out of que and into function
+            if (func) func(queue.shift());
+              // if no function, push to array for return
+            else if (!func) arr.push(queue.shift());
+              // recursion
             if (node.left) queue.push(node.left)
-            if (node.right)queue.push(node.right)
+            if (node.right) queue.push(node.right)
         }
+        if (!func) return arr
     }
 
     inOrder(func, node=this.root) {
@@ -162,7 +169,10 @@ class Tree {
     }
 
     height(node) {
+          // find depth of given node from root
         let fromRoot = this.depth(node);
+          // init deepest variable and traverse subtree ot find
+          // deepest node from subtree and use fromRoot to find difference
         let deepest = 0;
         this.levelOrder((item) => {
             if (this.depth(item) > deepest) deepest = this.depth(item);
@@ -173,9 +183,25 @@ class Tree {
 
     depth(node, start=this.root, count = 0) {
         if (node == start) return count;
+          // add 1 to counter each time recurse down tree happens
         count++;
         if (node.data < start.data) return this.depth(node, start.left, count)
         if (node.data > start.data) return this.depth(node, start.right, count);
+    }
+
+    isBalanced() {
+          // height of left and right subtrees to compare
+        let left = this.height(this.root.left);
+        let right = this.height(this.root.right);
+        return (left - right < 2 && left - right > -2)
+    }
+
+    rebalance() {
+        let newArr = [];
+        this.levelOrder((node) => {
+            newArr.push(node.data);
+        })
+        this.root = buildTree(mergeSort(newArr)) 
     }
 
 }
@@ -191,10 +217,6 @@ let buildTree = (d, start=0, end) => {
     return root;
 }
 
-let binarySearchTree = new Tree(sortedArrWithoutDuplicates);
-binarySearchTree.root = buildTree(binarySearchTree.array);
-
-
 const prettyPrint = (node, prefix = '', isLeft = true) => {
     if (node.right !== null) {
       prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
@@ -205,9 +227,28 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     }
 }
 
+
+//
+//
+// ~~~~~~~ TESTING AREA ~~~~~~~~~~~
+//
+//
+
+
+let binarySearchTree = new Tree(sortedArrWithoutDuplicates);
+binarySearchTree.root = buildTree(binarySearchTree.array);
+
+
+
+
 binarySearchTree.insert(56);
-binarySearchTree.insert(10)
-binarySearchTree.insert(35)
+binarySearchTree.insert(10);
+binarySearchTree.insert(9);
+binarySearchTree.insert(35);
+binarySearchTree.insert(8)
+binarySearchTree.insert(7)
+binarySearchTree.insert(6)
+binarySearchTree.insert(5)
 prettyPrint(binarySearchTree.root);
 
 //
@@ -218,7 +259,7 @@ prettyPrint(binarySearchTree.root);
 let testNode = binarySearchTree.find(70);
 let testNodeTwo = binarySearchTree.find(56);
 
-
-console.log(binarySearchTree.height(testNode))
-
+console.log(binarySearchTree.isBalanced())
+binarySearchTree.rebalance();
+prettyPrint(binarySearchTree.root)
 
