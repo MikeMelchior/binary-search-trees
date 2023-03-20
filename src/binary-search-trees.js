@@ -125,13 +125,13 @@ class Tree {
     }
 
     find(value, node=this.root) {
-        if (value == node.data) console.log(node)
-        else if (value > node.data) this.find(value, node.right);
-        else if (value < node.data) this.find(value, node.left);
+        if (value == node.data) return node;
+        else if (value > node.data) return this.find(value, node.right);
+        else if (value < node.data) return this.find(value, node.left);
     }
 
-    levelOrder(func) {
-        let queue = [this.root];
+    levelOrder(func, start=this.root) {
+        let queue = [start];
         while(queue.length > 0) {
             let node = queue[0]
             func(queue.shift());
@@ -161,16 +161,23 @@ class Tree {
         this.postOrder(func, node.left);
     }
 
-    height(value, node=this.root, count = 0) {
-        if (value == node.data) return count;
-        count++;
-        if (value < node.data) return this.height(value, node.left, count)
-        if (value > node.data) return this.height(value, node.right, count);
+    height(node) {
+        let fromRoot = this.depth(node);
+        let deepest = 0;
+        this.levelOrder((item) => {
+            if (this.depth(item) > deepest) deepest = this.depth(item);
+        }, node)
+        let height = deepest - fromRoot;
+        return height
     }
 
-    logVal(height) {
-        console.log(this.height(height))
+    depth(node, start=this.root, count = 0) {
+        if (node == start) return count;
+        count++;
+        if (node.data < start.data) return this.depth(node, start.left, count)
+        if (node.data > start.data) return this.depth(node, start.right, count);
     }
+
 }
 
 let buildTree = (d, start=0, end) => {
@@ -208,7 +215,10 @@ prettyPrint(binarySearchTree.root);
 // prettyPrint(binarySearchTree.root); 
 //
 
-// binarySearchTree.find(56)
+let testNode = binarySearchTree.find(70);
+let testNodeTwo = binarySearchTree.find(56);
 
 
-console.log(binarySearchTree.height(35))
+console.log(binarySearchTree.height(testNode))
+
+
