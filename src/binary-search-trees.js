@@ -139,6 +139,27 @@ class Tree {
             if (node.right)queue.push(node.right)
         }
     }
+
+    inOrder(func, node) {
+        if (node == null) return;
+        this.inOrder(func, node.left);
+        func(node);
+        this.inOrder(func, node.right)
+    }
+
+    preOrder(func, node) {
+        if (node == null) return;
+        func(node);
+        this.preOrder(func, node.left);
+        this.preOrder(func, node.right)
+    }
+    
+    postOrder(func, node) {
+        if (node== null) return; 
+        this.postOrder(func, node.right);
+        func(node);
+        this.postOrder(func, node.left);
+    }
 }
 
 let buildTree = (d, start=0, end) => {
@@ -179,6 +200,6 @@ prettyPrint(binarySearchTree.root);
 // binarySearchTree.find(56)
 
 
-binarySearchTree.levelOrder((node) => {
-    console.log(node)
-})
+binarySearchTree.postOrder((node) => {
+    console.log(node.data)
+}, binarySearchTree.root) 
