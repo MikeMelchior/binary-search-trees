@@ -124,7 +124,7 @@ class Tree {
         } 
     }
 
-    find(value, node = this.root) {
+    find(value, node=this.root) {
         if (value == node.data) console.log(node)
         else if (value > node.data) this.find(value, node.right);
         else if (value < node.data) this.find(value, node.left);
@@ -140,25 +140,36 @@ class Tree {
         }
     }
 
-    inOrder(func, node) {
+    inOrder(func, node=this.root) {
         if (node == null) return;
         this.inOrder(func, node.left);
         func(node);
         this.inOrder(func, node.right)
     }
 
-    preOrder(func, node) {
+    preOrder(func, node=this.root) {
         if (node == null) return;
         func(node);
         this.preOrder(func, node.left);
         this.preOrder(func, node.right)
     }
     
-    postOrder(func, node) {
+    postOrder(func, node=this.root) {
         if (node== null) return; 
         this.postOrder(func, node.right);
         func(node);
         this.postOrder(func, node.left);
+    }
+
+    height(value, node=this.root, count = 0) {
+        if (value == node.data) return count;
+        count++;
+        if (value < node.data) return this.height(value, node.left, count)
+        if (value > node.data) return this.height(value, node.right, count);
+    }
+
+    logVal(height) {
+        console.log(this.height(height))
     }
 }
 
@@ -200,6 +211,4 @@ prettyPrint(binarySearchTree.root);
 // binarySearchTree.find(56)
 
 
-binarySearchTree.postOrder((node) => {
-    console.log(node.data)
-}, binarySearchTree.root) 
+console.log(binarySearchTree.height(35))
