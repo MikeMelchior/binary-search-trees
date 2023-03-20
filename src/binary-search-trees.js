@@ -67,7 +67,6 @@ class Tree {
         }
         return tmp;
     }
-
         // function to use in deletion when deletion node has multiple children
     replaceNodeWithTwoChildren(node) {
             // find next smallest node
@@ -127,9 +126,18 @@ class Tree {
 
     find(value, node = this.root) {
         if (value == node.data) console.log(node)
-        
         else if (value > node.data) this.find(value, node.right);
         else if (value < node.data) this.find(value, node.left);
+    }
+
+    levelOrder(func) {
+        let queue = [this.root];
+        while(queue.length > 0) {
+            let node = queue[0]
+            func(queue.shift());
+            if (node.left) queue.push(node.left)
+            if (node.right)queue.push(node.right)
+        }
     }
 }
 
@@ -168,4 +176,9 @@ prettyPrint(binarySearchTree.root);
 // prettyPrint(binarySearchTree.root); 
 //
 
-binarySearchTree.find(56)
+// binarySearchTree.find(56)
+
+
+binarySearchTree.levelOrder((node) => {
+    console.log(node)
+})
